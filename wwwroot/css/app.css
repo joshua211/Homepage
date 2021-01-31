@@ -1,0 +1,88 @@
+html,
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+a,
+.btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+.font-cascadia {
+    font-family: 'Cascadia Code';
+}
+
+.text-azure {
+    color: rgb(19, 133, 133);
+}
+
+.bg-darkGray-600 {
+    background: rgb(56, 56, 56);
+}
+
+.bg-darkGray-700 {
+    background: rgb(46, 45, 45);
+}
+
+.text-console1 {
+    color: rgb(206, 110, 20);
+}
+
+.text-overflow-scroll {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.text-overflow-hidden {
+    overflow: hidden;
+}
+
+.text-console2 {
+    color: rgb(158, 105, 55);
+}
+
+.bg-inherit {
+    background: inherit;
+}
+
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

@@ -1,0 +1,11 @@
+.console::-webkit-scrollbar {
+    width: 20px;
+}
+
+.console::-webkit-scrollbar-track {
+    background-color: rgb(19, 18, 18);
+}
+
+.console::-webkit-scrollbar-thumb {
+    background: rgb(195, 195, 195);
+}
