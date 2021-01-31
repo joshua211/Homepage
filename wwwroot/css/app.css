@@ -67,6 +67,10 @@ a,
     background: inherit;
 }
 
+.ml-space {
+    margin-left: .65rem;
+}
+
 
 #blazor-error-ui {
     background: lightyellow;
@@ -85,4 +89,16 @@ a,
     position: absolute;
     right: 0.75rem;
     top: 0.5rem;
+}
+
+#consoleBody::-webkit-scrollbar {
+    width: 20px;
+}
+
+#consoleBody::-webkit-scrollbar-track {
+    background-color: rgb(19, 18, 18);
+}
+
+#consoleBody::-webkit-scrollbar-thumb {
+    background: rgb(195, 195, 195);
 }

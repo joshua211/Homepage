@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using homepage.Enums;
 using homepage.Interfaces;
 
 namespace homepage.Console
@@ -8,36 +9,53 @@ namespace homepage.Console
     public class Webconsole : IWebConsole
     {
         public event Action NewDisplayContent;
-        public List<string> DisplayContent { get; private set; }
+        public List<DisplayContent> DisplayContent { get; private set; }
         public string CurrentUser { get; private set; }
         public string CurrentDir { get; private set; }
+
+        public IEnumerable<IConsoleCommand> AvailableCommands { get; }
 
         private Dictionary<string, IConsoleCommand> commands;
 
         public Webconsole(IEnumerable<IConsoleCommand> cmds)
         {
             DisplayContent = new();
+            AvailableCommands = cmds;
             commands = cmds.ToDictionary(c => c.Name);
             CurrentUser = "User";
             CurrentDir = "~";
         }
 
+        public void Write(DisplayContent content)
+        {
+            DisplayContent.Add(content);
+            NewDisplayContent?.Invoke();
+        }
+
+        public void Write(IEnumerable<DisplayContent> content)
+        {
+            DisplayContent.AddRange(content);
+            NewDisplayContent?.Invoke();
+        }
+
         public void Write(string content)
         {
-            System.Console.WriteLine("Write: " + content);
-            DisplayContent.Add(content + "<br/>");
-            NewDisplayContent?.Invoke();
+            Write(new Console.DisplayContent(content, true));
         }
 
         public void Error(string content, Exception e = null)
         {
-            DisplayContent.Add(ToError(content));
+            Write(new DisplayContent(content, true, Colors.Error));
+            if (e is not null)
+                Write(new DisplayContent(e.Message, true, Colors.Error));
             NewDisplayContent?.Invoke();
         }
 
         public void ComputeCommand(string commandName)
         {
-            Write(GetPrefix() + ' ' + commandName);
+            Write(GetPrefix());
+            Write(new DisplayContent(" " + commandName, true, Colors.Command));
+
             if (String.IsNullOrWhiteSpace(commandName))
                 return;
 
@@ -47,29 +65,24 @@ namespace homepage.Console
             {
                 if (parts.Length > 1 && parts[1].ToLower() == "help")
                 {
-                    System.Console.WriteLine("Help");
                     Write(command.ToHelp());
                     return;
                 }
                 else
                     command.Execute(this, parts.Skip(1).ToArray());
-
             }
             else
             {
-                Error($"No such command found. Try {ToCommandNameDisplay("help")} to get a list of all commands");
+                Write(new DisplayContent("No such command found. Try ", false, Colors.Error));
+                Write(new DisplayContent("help ", false, Colors.Info));
+                Write(new DisplayContent("to get a list of all commands", true, Colors.Error));
             }
         }
 
-        private string GetPrefix() =>
-            $"<span class=\"text-azure\">@{CurrentUser}</span><span class=\"text-console2\">:{CurrentDir}$</span>";
-
-
-        private string ToError(string message) =>
-            $"<span class=\"text-red-700\">{message}</span><br/>";
-
-
-        private string ToCommandNameDisplay(string name) =>
-            $"<span class=\"text-blue-300\">{name}</span>";
+        private IEnumerable<DisplayContent> GetPrefix()
+        {
+            yield return new DisplayContent("@" + CurrentUser, color: Colors.Username);
+            yield return new DisplayContent(":" + CurrentDir + "$", color: Colors.Console);
+        }
     }
 }

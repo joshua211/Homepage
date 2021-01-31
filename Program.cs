@@ -20,7 +20,7 @@ namespace homepage
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services.AddSingleton<IWebConsole, Webconsole>();
             builder.Services.AddCommand<TestCommand>();
-            var x = typeof(TestCommand);
+            builder.Services.AddCommand<HelpCommand>();
             builder.RootComponents.Add<App>("#app");
             await builder.Build().RunAsync();
         }

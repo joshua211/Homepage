@@ -8,28 +8,34 @@
           <i class="far fa-window-maximize cursor-pointer"></i>
         </div>
       </nav>
-    <div class="w-full h-full pb-36 text-overflow-scroll font-cascadia bg-inherit leading-5 text-console2 pt-5 pl-3 text-lg">
+    <div id="consoleBody" class="w-full h-full pb-36 text-overflow-scroll font-cascadia bg-inherit leading-5 text-console2 pt-5 pl-3 text-lg">
         @foreach (var content in console.DisplayContent)
         {
-            @((MarkupString)content)
+            @((MarkupString)content.ToMarkup())
         }
         
         <ConsoleInput/>
     </div>
 </div>
 
-@code {
+@code { 
     protected override void OnInitialized()
     {
         console.Write("Initialising console...");
-        console.NewDisplayContent += () => StateHasChanged();
         console.Write("Done!");
+        console.NewDisplayContent += OnNewContent;
         base.OnInitialized();
     }
 
     private async Task OnClick()
     {
       await JS.InvokeVoidAsync("focusElement", "consoleInput");
+    }
+
+    private async void OnNewContent()
+    {
+      StateHasChanged();
+      await JS.InvokeVoidAsync("scrollToBottom", "consoleBody");
     }
 }
 
